@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: kaniko-image-
+spec:
+  entrypoint: build-kaniko-image
+  arguments:
+    parameters:
+    - name: tag
+      value: latest
+  templates:
+  - name: build-kaniko-image
+    inputs:
+      parameters:
+      - name: tag
+    steps:
+    - - name: mirror-image
+        templateRef:
+          name: flavor-image-mirror-template
+          template: main
+        arguments:
+          parameters:
+          - name: git_repo
+            value: https://github.com/bradfordwagner/container-kaniko.git
+          - name: git_version
+            value: main
+          - name: repo_name
+            value: quay.io/bradfordwagner/kaniko
+          - name: tag
+            value: "{{inputs.parameters.tag}}"
+          - name: push
+            value: ""
+          - name: upstream_repo
+            value: "{{ item.repo }}"
+          - name: upstream_repo_name_override
+            value: "{{ item.name_override }}"
+          - name: upstream_tag
+            value: "{{ item.tag }}"
+        withItems:
+        - { repo: 'gcr.io/kaniko-project/executor', tag: 'latest', name_override: kaniko-executor }
+        - { repo: 'gcr.io/kaniko-project/executor', tag: 'v1.7.0', name_override: kaniko-executor }
+        - { repo: 'gcr.io/kaniko-project/executor', tag: 'v1.6.0', name_override: kaniko-executor }
+
