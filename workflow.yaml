@@ -6,13 +6,15 @@ spec:
   entrypoint: build-kaniko-image
   arguments:
     parameters:
-    - name: tag
-      value: latest
+    - name: git_ref_type
+      value: branches
+    - name: git_version
   templates:
   - name: build-kaniko-image
     inputs:
       parameters:
-      - name: tag
+      - name: git_ref_type
+      - name: git_version
     steps:
     - - name: mirror-image
         templateRef:
@@ -23,19 +25,15 @@ spec:
           - name: git_repo
             value: https://github.com/bradfordwagner/container-kaniko.git
           - name: git_version
-            value: main
+            value: "{{inputs.parameters.git_version}}"
           - name: repo_name
             value: quay.io/bradfordwagner/kaniko
-          - name: tag
-            value: "{{inputs.parameters.tag}}"
-          - name: push
-            value: ""
           - name: upstream_repo
             value: "{{ item.repo }}"
-          - name: upstream_repo_name_override
-            value: "{{ item.name_override }}"
           - name: upstream_tag
             value: "{{ item.tag }}"
+          - name: upstream_repo_name_override
+            value: "{{ item.name_override }}"
         withItems:
         - { repo: 'gcr.io/kaniko-project/executor', tag: 'latest', name_override: kaniko-executor }
         - { repo: 'gcr.io/kaniko-project/executor', tag: 'v1.7.0', name_override: kaniko-executor }
