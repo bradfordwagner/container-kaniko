@@ -19,7 +19,7 @@ spec:
     - - name: mirror-image
         templateRef:
           name: flavor-image-mirror-template
-          template: main
+          template: "{{inputs.parameters.git_ref_type}}"
         arguments:
           parameters:
           - name: git_repo
