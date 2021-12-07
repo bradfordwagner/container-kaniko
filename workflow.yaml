@@ -34,8 +34,10 @@ spec:
             value: "{{ item.tag }}"
           - name: upstream_repo_name_override
             value: "{{ item.name_override }}"
+          - name: runtime_platforms
+            value: "{{ item.runtime_platforms }}"
         withItems:
-        - { repo: 'gcr.io/kaniko-project/executor', tag: 'latest', name_override: kaniko-executor }
-        - { repo: 'gcr.io/kaniko-project/executor', tag: 'v1.7.0', name_override: kaniko-executor }
-        - { repo: 'gcr.io/kaniko-project/executor', tag: 'v1.6.0', name_override: kaniko-executor }
+        - { repo: 'gcr.io/kaniko-project/executor', tag: 'latest', name_override: kaniko-executor, runtime_platforms: [linux/amd64, linux/arm64   , linux/ppc64le] }
+        - { repo: 'gcr.io/kaniko-project/executor', tag: 'v1.7.0', name_override: kaniko-executor, runtime_platforms: [linux/amd64, linux/arm64] }
+        - { repo: 'gcr.io/kaniko-project/executor', tag: 'v1.6.0', name_override: kaniko-executor, runtime_platforms: [linux/amd64, linux/arm64   , linux/ppc64le] }
 
