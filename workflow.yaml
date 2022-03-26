@@ -35,7 +35,7 @@ spec:
           - name: upstream_tag
             value: "{{ item.tag }}"
           - name: tag_suffix
-            value: "{{ item.name_override }}-{{ item.tag }}"
+            value: "-{{ item.name_override }}-{{ item.tag }}"
           - name: runtime_platforms
             value: "{{ item.runtime_platforms }}"
         withItems:
